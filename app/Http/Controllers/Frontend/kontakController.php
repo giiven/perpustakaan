@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\kontakRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,11 +13,11 @@ class kontakController extends Controller
     {
         return view('frontend.kontak.index');
     }
-    public function store(Request $request) {
+    public function store(kontakRequest $request) {
 
         DB::table('messages')->insert([
             'name' => $request->name,
-            'pesan' => $request->message,
+            'pesan' => $request->pesan,
             'email' => $request->email,
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),

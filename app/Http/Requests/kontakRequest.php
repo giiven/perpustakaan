@@ -13,9 +13,7 @@ class kontakRequest extends FormRequest
      */
     public function authorize()
     {
-        return [
-            
-        ];
+        return true;
     }
 
     /**

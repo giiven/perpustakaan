@@ -8,15 +8,6 @@
 		<div class="row">
 			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
 				<article class="single-post">
-					@if(Session::has('message'))
-					<div class="alert alert-success alert-dismissible">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<h5>
-							<i class="icon fas fa-check"></i> Sukses!
-						</h5>
-						{{ Session('message')}}
-					</div>
-					@endif
 
 					<h3>YOU CAN CALL ME !</h3>
 					<ul class="list-inline">
@@ -33,13 +24,32 @@
 					</ul>
 				</article>
 				<div class="block comment">
+					@if(Session::has('message'))
+					<div class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h5>
+							<i class="icon fas fa-check"></i> Sukses!
+						</h5>
+						{{ Session('message')}}
+					</div>
+					@endif
+
+					@if ($errors->any())
+					<div class="alert alert-danger">
+						<ul>
+							@foreach ($errors->all () as $error)
+							<li>{{ $error }} </li>
+							@endforeach
+						</ul>
+					</div>
+					@endif
 					<h4>Tinggalkan Pesan</h4>
 					<form action="{{route('frontend.pesan')}}" method="post">
 						@csrf
 						<!-- Message -->
 						<div class="form-group mb-30">
-							<label for="message">Pesan</label>
-							<textarea class="form-control" name="message" id="message" rows="8"></textarea>
+							<label for="pesan">Pesan</label>
+							<textarea class="form-control" name="pesan" id="pesan" rows="8"></textarea>
 						</div>
 						<div class="row">
 							<div class="col-sm-12 col-md-6">
