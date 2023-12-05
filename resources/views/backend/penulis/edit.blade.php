@@ -1,15 +1,15 @@
 @extends('backend.app')
-
+@section('title', 'Edit Penulis')
 @section('content')
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded h-100 p-4">
-        <h6 class="mb-4">Tambah Penulis</h6>
+        <h6 class="mb-4">Edit Penulis</h6>
         <form method="post" action="{{route('backend.update_penulis', $datapenulis->id)}}" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="nama" class="form-label">Nama</label>
                 <input type="text" class="form-control" value="{{ old('nama',$datapenulis->nama)}}" name="nama" id="nama">
-               
+
             </div>
             <div class="mb-3">
                 <label for="alamat" class="form-label">Alamat</label>

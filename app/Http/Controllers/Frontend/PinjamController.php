@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PinjamController extends Controller
 {
@@ -13,10 +14,10 @@ class PinjamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id_buku)
     {
         // Logika atau pemrosesan lainnya untuk halaman peminjaman
-        return view('frontend.pinjaman.index'); // Sesuaikan dengan struktur direktori Anda
+        return view('frontend.pinjaman.index', compact('id_buku')); // Sesuaikan dengan struktur direktori Anda
     }
 
     /**
@@ -37,51 +38,60 @@ class PinjamController extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
+        $getIdPeminjam = DB::table('peminjam')->select('id')->where('user_id', Auth::user()->id)->first();
 
-        try {
-           
-            // Buku insertion
-            $transaksi = DB::table('transaksi')->insertGetId([
-                'tanggal_pinjam' => $request->tanggal_pinjam,
-                'tanggal_kembali' => $request->tanggal_kembali,
-                'total' => $request->total,
-                'id_peminjam' => $request->id_peminjam,
-                'created_by' => 1,
-                'updated_by' => 1,
-                'created_at' => \Carbon\Carbon::now(),
-                'updated_at' => \Carbon\Carbon::now(),
-                // auth()->user()->id
-            ]);
+        // counter rating setiap ada peminjaman
+        DB::table('buku')->where('id', $request->id_buku)->increment('rating');
 
-            // Detail Buku insertion
-            DB::table('detail_transakasi')->insert([
-                'id_buku' => $request->id_buku,
-                'telat_pengembalian' => $request->telat_pengembalian,
-                'denda' => $request->denda,
-                'id_transaksi' => $request->id_transaksi
-                ,
-                'created_at' => \Carbon\Carbon::now(),
-                'updated_at' => \Carbon\Carbon::now(),
-            ]);
+        DB::table('buku')->where('id', $request->id_buku)->decrement('stok_buku', (int) $request->total_buku);
 
-            DB::commit();
-            return redirect()->route('backend.buku')->with('message', 'Buku Berhasil Diajukan');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        $id_transaksi = DB::table('transaksi')->insertGetId([
+            'tanggal_pinjam' => $request->tgl_peminjaman,
+            'tanggal_kembali' => $request->tgl_pengembalian,
+            'total' => $request->total_buku,
+            'status' => 0,
+            'id_peminjam' => $getIdPeminjam->id,
+            'created_by' => Auth::user()->id ?? 1,
+            'updated_by' => Auth::user()->id ?? 1,
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+
+        ]);
+
+        DB::table('detail_transakasi')->insert([
+            'id_buku' => $request->id_buku,
+            'telat_pengembalian' => 0,
+            'denda' => 0,
+            'id_transaksi' => $id_transaksi,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('frontend.list.pinjaman', Auth::user()->id);
     }
 
-    /**
+    /**;
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id_user)
     {
-        //
+        // dd($id_user);
+        if (Auth::check()) {
+            $detail_transaksi = DB::table('detail_transakasi')
+            ->where('transaksi.created_by', $id_user)
+            ->select('detail_transakasi.id','detail_transakasi.created_at', 'buku', 'judul',  'telat_pengembalian','denda','id_transaksi')
+            ->join('transaksi', 'transaksi.id', 'detail_transakasi.id_transaksi')
+            ->join('buku', 'buku.id', 'detail_transakasi.buku')
+            // ->join('users', 'users.id', 'peminjam.user_id')
+            ->paginate(10);
+    
+            return view ('frontend.pinjaman.listpinjaman', compact('detail_transaksi'));
+        } else {
+            return "Login Dulu gehh";
+        }
     }
 
     /**
