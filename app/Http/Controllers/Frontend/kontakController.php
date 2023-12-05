@@ -11,7 +11,8 @@ class kontakController extends Controller
 {
     public function index()
     {
-        return view('frontend.kontak.index');
+        $konfigurasi = DB::table('konfigurasi')->select('*')->first();
+        return view('frontend.kontak.index', compact('konfigurasi'));
     }
     public function store(kontakRequest $request) {
 

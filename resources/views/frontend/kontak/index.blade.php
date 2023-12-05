@@ -13,7 +13,8 @@
 					<ul class="list-inline">
 						<li class="list-inline-item">by <a href="">pustaka</a></li>
 					</ul>
-					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.2180018139234!2d105.29336527380741!3d-5.383703253829823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40dac03d097843%3A0x6bb59f4ba9a84e8c!2sPT%20Microdata%20Indonesia%20%7C%20Software%20Developer%20%7C%20IT%20Consultant!5e0!3m2!1sid!2sid!4v1700207910220!5m2!1sid!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+					{!! $konfigurasi->maps !!}
+					<!-- <iframe src="<https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.2519299277214!2d105.31400607380738!3d-5.378507853789355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40dca6e4b77649%3A0xbb73fd198c9f84c9!2sPKK%20Agropark%20Lampung!5e0!3m2!1sid!2sid!4v1701232281759!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
 
 					<ul class="social-circle-icons list-inline mt-3">
 						<li class="list-inline-item text-center"><a class="fa fa-facebook" href=""></a></li>
@@ -85,7 +86,7 @@
 						<!-- Widget Header -->
 						<h5 class="widget-header">Email</h5>
 						<ul class="category-list">
-							<li><a href="">Pustaka@gmail900.com <span class="float-right"></span></a></li>
+							<li><a href="">{{ $konfigurasi->email}} <span class="float-right"></span></a></li>
 
 						</ul>
 					</div>
@@ -95,7 +96,7 @@
 						<h5 class="widget-header"> No Telepon</h5>
 						<ul class="store-list md list-inline">
 							<ul class="category-list">
-								<li><a href="">0857 6789 0934 <span class="float-right"></span></a></li>
+								<li><a href="">{{ $konfigurasi->no_telepon}} <span class="float-right"></span></a></li>
 								</li>
 							</ul>
 					</div>
@@ -104,7 +105,7 @@
 						<!-- Widget Header -->
 						<h5 class="widget-header">Alamat</h5>
 						<ul class="archive-list">
-							<li><a href="">Jl. Endro Suratmin No.52d, Way Dadi, Kec. Sukarame, Kota Bandar Lampung, Lampung 35131</a></li>
+							<li><a href="">{{ $konfigurasi ->alamat}}</a></li>
 						</ul>
 					</div>
 				</div>

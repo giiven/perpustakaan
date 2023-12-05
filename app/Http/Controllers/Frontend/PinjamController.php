@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PinjamController extends Controller
 {
@@ -36,7 +37,40 @@ class PinjamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+           
+            // Buku insertion
+            $transaksi = DB::table('transaksi')->insertGetId([
+                'tanggal_pinjam' => $request->tanggal_pinjam,
+                'tanggal_kembali' => $request->tanggal_kembali,
+                'total' => $request->total,
+                'id_peminjam' => $request->id_peminjam,
+                'created_by' => 1,
+                'updated_by' => 1,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now(),
+                // auth()->user()->id
+            ]);
+
+            // Detail Buku insertion
+            DB::table('detail_transakasi')->insert([
+                'id_buku' => $request->id_buku,
+                'telat_pengembalian' => $request->telat_pengembalian,
+                'denda' => $request->denda,
+                'id_transaksi' => $request->id_transaksi
+                ,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now(),
+            ]);
+
+            DB::commit();
+            return redirect()->route('backend.buku')->with('message', 'Buku Berhasil Diajukan');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**

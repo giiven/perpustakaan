@@ -27,7 +27,7 @@
 
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
-
+  
 </head>
 
 <body class="body-wrapper">
