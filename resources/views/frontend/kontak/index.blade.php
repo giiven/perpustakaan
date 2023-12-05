@@ -8,21 +8,13 @@
 		<div class="row">
 			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
 				<article class="single-post">
-					@if(Session::has('message'))
-					<div class="alert alert-success alert-dismissible">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<h5>
-							<i class="icon fas fa-check"></i> Sukses!
-						</h5>
-						{{ Session('message')}}
-					</div>
-					@endif
 
 					<h3>YOU CAN CALL ME !</h3>
 					<ul class="list-inline">
 						<li class="list-inline-item">by <a href="">pustaka</a></li>
 					</ul>
-					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.2180018139234!2d105.29336527380741!3d-5.383703253829823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40dac03d097843%3A0x6bb59f4ba9a84e8c!2sPT%20Microdata%20Indonesia%20%7C%20Software%20Developer%20%7C%20IT%20Consultant!5e0!3m2!1sid!2sid!4v1700207910220!5m2!1sid!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+					{!! $konfigurasi->maps !!}
+					<!-- <iframe src="<https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.2519299277214!2d105.31400607380738!3d-5.378507853789355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40dca6e4b77649%3A0xbb73fd198c9f84c9!2sPKK%20Agropark%20Lampung!5e0!3m2!1sid!2sid!4v1701232281759!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
 
 					<ul class="social-circle-icons list-inline mt-3">
 						<li class="list-inline-item text-center"><a class="fa fa-facebook" href=""></a></li>
@@ -33,13 +25,32 @@
 					</ul>
 				</article>
 				<div class="block comment">
+					@if(Session::has('message'))
+					<div class="alert alert-success alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<h5>
+							<i class="icon fas fa-check"></i> Sukses!
+						</h5>
+						{{ Session('message')}}
+					</div>
+					@endif
+
+					@if ($errors->any())
+					<div class="alert alert-danger">
+						<ul>
+							@foreach ($errors->all () as $error)
+							<li>{{ $error }} </li>
+							@endforeach
+						</ul>
+					</div>
+					@endif
 					<h4>Tinggalkan Pesan</h4>
 					<form action="{{route('frontend.pesan')}}" method="post">
 						@csrf
 						<!-- Message -->
 						<div class="form-group mb-30">
-							<label for="message">Pesan</label>
-							<textarea class="form-control" name="message" id="message" rows="8"></textarea>
+							<label for="pesan">Pesan</label>
+							<textarea class="form-control" name="pesan" id="pesan" rows="8"></textarea>
 						</div>
 						<div class="row">
 							<div class="col-sm-12 col-md-6">
